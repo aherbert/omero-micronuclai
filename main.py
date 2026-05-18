@@ -254,7 +254,7 @@ def main():
                 # Save predictions
                 log.info("Saving predictions")
                 basename = args.out / str(plate_id) / well_pos / str(image_id)
-                basename.mkdir(parents=True, exist_ok=True)
+                basename.parent.mkdir(parents=True, exist_ok=True)
                 df_predictions.to_csv(f"{basename}_predictions.csv", index=False)
                 df_mn_counts.to_csv(f"{basename}_counts.csv", index=True)
                 df_summary.to_csv(f"{basename}_summary.csv", index=True, header=False)

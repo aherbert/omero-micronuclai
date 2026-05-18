@@ -72,3 +72,5 @@ a suffix for each result file:
 - `[image_id]_counts.csv`: Summary count of number of micronuclei across all nuclei.
 - `[image_id]_predictions.csv`: Score and count of micronuclei per nucleus.
 - `[image_id]_summary.csv`: Summary of analysis results.
+
+For example, the count results for image ID `123` from well `B2` in plate `456` would be saved to `output/456/B2/123_counts.csv`.
