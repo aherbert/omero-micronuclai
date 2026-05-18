@@ -48,7 +48,14 @@ Analysis of a single image:
 uv run ./main.py -h
 
 # Analyse
-uv run ./main.py ID [ID ...] -o output --model ../micronuclAI/models/micronuclai.pt
+uv run ./main.py ID [ID ...] --model ../micronuclAI/models/micronuclai.pt
+```
+
+Analysis for multiple images can use the `well` or `plate` object argument to process an entire well or plate:
+
+```
+uv run ./main.py ID --object well --model ../micronuclAI/models/micronuclai.pt
+uv run ./main.py ID --object plate --model ../micronuclAI/models/micronuclai.pt
 ```
 
 Connection to OMERO uses the [OMERO.py](https://github.com/ome/omero-py)
@@ -56,10 +63,12 @@ Python bindings. The script will ask for your OMERO server
 URL and username and password. Repeat invocations will reuse an active
 session or reconnect if it has timed out.
 
-Multiple IDs can be provided to analyse selected images.
+Multiple IDs can be provided to analyse selected images/wells/plates.
 
-Results are saved to the `output` directory for each image:
+Results are saved to the `output` directory for each image
+using the path prefix `plate_id/well_position/image_id_` and
+a suffix for each result file:
 
-- `[ID]_counts.csv`: Summary count of number of micronuclei across all nuclei.
-- `[ID]_predictions.csv`: Score and count of micronuclei per nucleus.
-- `[ID]_summary.csv`: Summary of analysis results.
+- `[image_id]_counts.csv`: Summary count of number of micronuclei across all nuclei.
+- `[image_id]_predictions.csv`: Score and count of micronuclei per nucleus.
+- `[image_id]_summary.csv`: Summary of analysis results.
