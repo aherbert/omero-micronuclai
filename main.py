@@ -3,6 +3,7 @@
 
 import argparse
 
+from numpy import require
 from omero.gateway import WellSampleWrapper
 
 
@@ -44,6 +45,7 @@ def main():
         "-mod",
         "--model",
         dest="model",
+        require=True,
         help="Pathway to prediction model.",
     )
     _ = options.add_argument(
