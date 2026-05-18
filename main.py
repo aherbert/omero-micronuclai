@@ -148,7 +148,7 @@ def main():
             query += " where well.id = :oid"
         else:
             query += " where ws.image.id = :oid"
-        query += " order by ws.image.id"
+        query += " order by pt.id, well.row, well.column, ws.image.id"
 
         for r in q.projection(query, params):
             data.append([unwrap(x) for x in r])
