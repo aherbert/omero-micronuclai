@@ -32,10 +32,6 @@ def main():
         "--device",
         help="Torch device (default to auto-detect)",
     )
-    # _ = parser.add_argument(
-    #     "--results",
-    #     help="Result filename (default to use input IDs)",
-    # )
     _ = parser.add_argument(
         "--overwrite",
         default=False,
@@ -191,8 +187,17 @@ def main():
                 continue
 
             for j, (plate_id, row, col, image_id) in enumerate(image_ids):
-                image = conn.getObject("Image", image_id)
                 well_pos = _row_col_to_well_pos(row, col)
+                basename = args.out / str(plate_id) / well_pos / str(image_id)
+                basename.parent.mkdir(parents=True, exist_ok=True)
+
+                # Skip existing output files
+                prediction_file = f"{basename}_predictions.csv"
+                if os.path.exists(prediction_file) and not args.overwrite:
+                    log.info(f"Skipping {image_id} (already processed)")
+                    continue
+
+                image = conn.getObject("Image", image_id)
 
                 sizeZ = image.getSizeZ()
                 sizeC = image.getSizeC()
@@ -210,9 +215,14 @@ def main():
                     log.warning("No annotation for Segmentation_Mask")
                     continue
 
-                img = image.getPrimaryPixels().getPlane(0, args.ch, 0)
                 m = mask.getPrimaryPixels().getPlane(0, 0, 0)
+                if not m.any():
+                    log.warning(f"{well_pos} Image [{j + 1}/{len(image_ids)}] {image_id}: No mask objects")
+                    # Create empty prediction file to avoid reprocessing
+                    Path(prediction_file).touch()
+                    continue
 
+                img = image.getPrimaryPixels().getPlane(0, args.ch, 0)
                 image_name = image.getName()
                 log.info(
                     f"{well_pos} Image [{j + 1}/{len(image_ids)}] {image_id} [{image_name}]: shape={img.shape}"
@@ -253,9 +263,7 @@ def main():
 
                 # Save predictions
                 log.info("Saving predictions")
-                basename = args.out / str(plate_id) / well_pos / str(image_id)
-                basename.parent.mkdir(parents=True, exist_ok=True)
-                df_predictions.to_csv(f"{basename}_predictions.csv", index=False)
+                df_predictions.to_csv(prediction_file, index=False)
                 df_mn_counts.to_csv(f"{basename}_counts.csv", index=True)
                 df_summary.to_csv(f"{basename}_summary.csv", index=True, header=False)
 
