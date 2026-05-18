@@ -53,7 +53,7 @@ def main():
         action="store",
         default=(256, 256),
         type=int,
-        nargs="2",
+        nargs=2,
         help="Size of images for training (default: %(default)s)",
     )
     _ = options.add_argument(
