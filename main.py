@@ -45,7 +45,7 @@ def main():
         "-mod",
         "--model",
         dest="model",
-        require=True,
+        required=True,
         help="Pathway to prediction model.",
     )
     _ = options.add_argument(
