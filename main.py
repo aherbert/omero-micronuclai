@@ -3,7 +3,6 @@
 
 import argparse
 
-from numpy import require
 from omero.gateway import WellSampleWrapper
 
 
@@ -219,7 +218,9 @@ def main():
 
                 m = mask.getPrimaryPixels().getPlane(0, 0, 0)
                 if not m.any():
-                    log.warning(f"{well_pos} Image [{j + 1}/{len(image_ids)}] {image_id}: No mask objects")
+                    log.warning(
+                        f"{well_pos} Image [{j + 1}/{len(image_ids)}] {image_id}: No mask objects"
+                    )
                     # Create empty prediction file to avoid reprocessing
                     Path(prediction_file).touch()
                     continue
