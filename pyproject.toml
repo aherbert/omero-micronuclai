@@ -17,4 +17,5 @@ dependencies = [
     # Default zeroc-ice for other platforms or architectures
     'zeroc-ice>=3.6.5; sys_platform != "darwin" and platform_machine != "aarch64" and platform_machine != "x86_64"',
     "omero-py>=5.22.1",
+    "tabulate>=0.10.0",
 ]
