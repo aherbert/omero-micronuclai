@@ -3,8 +3,6 @@
 
 import argparse
 
-from omero.gateway import WellSampleWrapper
-
 
 def main():
     parser = argparse.ArgumentParser(
